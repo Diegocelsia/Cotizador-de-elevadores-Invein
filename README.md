@@ -1,55 +1,104 @@
-# Cotizador Elevador INVEIN — Guía operativa
 
-Aplicación Streamlit para cotizar elevadores. Esta guía explica cómo ejecutar localmente y desplegar gratuitamente en Streamlit Community Cloud.
+# Cotizador Elevador INVEIN — Guía de uso y despliegue
 
-**Resumen clave**
-- Frontend: Streamlit
-- Persistencia: SQLite por defecto (demo) — PostgreSQL mediante `DATABASE_URL` (producción)
-- Ejecutable principal: [app.py](app.py)
+Proyecto es un cotizador técnico y comercial de elevadores, desarrollado en Python con Streamlit. Guía clara y actualizada para ejecutarlo localmente o desplegarlo.
 
-**Dependencias principales**
-- Definidas en [requirements.txt](requirements.txt). He eliminado duplicados innecesarios para reducir tamaño.
+---
 
-**Estructura relevante**
-- Código: [app.py](app.py), [database.py](database.py), [models.py](models.py)
-- Importadores y catálogos: [importer.py](importer.py), [lamina_catalog.py](lamina_catalog.py), [pricing_factor_catalog.py](pricing_factor_catalog.py), [technical_capacities.py](technical_capacities.py)
-- Generador PDF: [pdf_generator.py](pdf_generator.py)
-- Datos: `data/` (archivos Excel y logos)
+## Ejecución local paso a paso
 
-## Ejecución local (rápida)
-1. Crear y activar entorno virtual:
-   - `python -m venv venv`  
-   - `venv\Scripts\activate` (Windows)
-2. Instalar dependencias: `pip install -r requirements.txt`
-3. (Opcional, recomendado para primer uso) Inicializar base de datos: `python init_db.py`
-4. (Opcional) Crear usuario administrador: `python create_admin.py`
-5. (Opcional) Importar datos desde Excel: `python importer.py`
-6. Ejecutar la aplicación: `streamlit run app.py`
+1. **Clona el repositorio y entra a la carpeta:**
+  ```sh
+  https://github.com/Diegocelsia/Cotizador-de-elevadores-Invein.git
+  cd tu_repo
+  ```
 
-Notas:
-- Por defecto la app usa SQLite en `invein.db`. Esto es suficiente para demos locales.
-- Si prefieres PostgreSQL, exporta `DATABASE_URL` antes de ejecutar:
-  - `set DATABASE_URL=postgresql://usuario:password@host:5432/dbname` (Windows)
+2. **Crea y activa un entorno virtual:**
+  ```sh
+  python -m venv venv
+  venv\Scripts\activate  # En Windows
+  # source venv/bin/activate  # En Linux/Mac
+  ```
 
-## Despliegue gratis recomendado — Streamlit Community Cloud
-1. Sube el repositorio a GitHub.
-2. En Streamlit Cloud, crea una nueva app apuntando al `app.py` del repo.
-3. Añade `requirements.txt` en la configuración (ya en repo).  
-4. (Opcional) En Secrets configura `DATABASE_URL` si vas a usar PostgreSQL.
+3. **Instala las dependencias:**
+  ```sh
+  pip install -r requirements.txt
+  ```
 
-Consejos de despliegue:
-- Para demos, no configures `DATABASE_URL`: Streamlit Cloud correrá la app con SQLite (no persistente entre restarts).
-- Para persistencia real, configura `DATABASE_URL` hacia una base externa (p. ej. PostgreSQL en ElephantSQL o servicios similares).
+4. **Inicializa la base de datos y el usuario comercial:**
+  ```sh
+  python init_db.py
+  python create_admin.py
+  ```
 
-## Cambios de limpieza recomendados
-- El archivo `invein.db` es una base de datos local; no es necesario incluirlo en el repo. Añádelo a `.gitignore` si controlas versión.
-- Ya eliminé un duplicado en `requirements.txt` para evitar instalar `bcrypt` dos veces.
+5. **Importa los datos base (precios y materiales):**
+  ```sh
+  python importer.py
+  ```
 
-## Verificación y mantenimiento
-- Prueba local completa: ejecutar `python init_db.py` → `python create_admin.py` → `python importer.py` → `streamlit run app.py` y validar flujo de login e importación.
-- Si usas PostgreSQL, asegúrate de tener `psycopg2-binary` instalado y `DATABASE_URL` correcto.
+6. **Ejecuta la aplicación:**
+  ```sh
+  streamlit run app.py
+  ```
 
-Si quieres, hago ahora:
-- Auditoría automática de imports para listar paquetes realmente usados y proponer `requirements.txt` final.
-- Añadir `.gitignore` con `venv/` y `invein.db`.
-- Ejecutar cambios y pruebas mínimas en los archivos (sin tocar tu entorno).
+7. **Accede desde tu navegador:**
+  - Abre [http://localhost:8501](http://localhost:8501)
+  - Usuario: `Invein`  |  Contraseña: `Invein2026*`
+
+
+
+## 📁 Estructura del proyecto
+
+- `app.py` — Interfaz principal (Streamlit)
+- `database.py`, `models.py` — ORM y modelos de datos
+- `importer.py` — Importa datos desde Excel (`data/Lamina.xlsx`, `data/Material.xlsx`)
+- `create_admin.py`, `init_db.py` — Inicialización y usuario comercial
+- `data/` — Archivos Excel y recursos
+- `requirements.txt` — Dependencias
+
+---
+
+## Notas y tips
+
+- **Base de datos:** Por defecto usa `invein.db` (SQLite). Para producción, configura `DATABASE_URL` a PostgreSQL.
+- **No subas `invein.db` ni `venv/` a GitHub:** Añádelos a `.gitignore`.
+- **Reimporta datos si cambias los Excel:** Ejecuta de nuevo `python importer.py`.
+- **¿Problemas?**
+  - Revisa la consola de Streamlit para mensajes de error.
+  - Asegúrate de tener los archivos Excel en la carpeta `data/`.
+
+---
+
+## Prueba rápida
+
+```sh
+python init_db.py
+python create_admin.py
+python importer.py
+streamlit run app.py
+```
+
+---
+
+## requirements.txt sugerido
+
+```
+streamlit>=1.28.0
+sqlalchemy>=2.0.0
+psycopg2-binary>=2.9.0
+passlib[bcrypt,argon2]>=1.7.0
+plotly>=5.14.0
+reportlab>=4.0.0
+openpyxl>=3.1.0,<3.2
+xlrd>=2.0.1
+pypdf>=4.2.0
+```
+
+---
+
+## Licencia y contacto
+
+- Proyecto privado para INVEIN.
+- Contacto: suarezdiego297@gmail.com
+
+---
