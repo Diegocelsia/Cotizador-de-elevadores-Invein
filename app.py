@@ -361,11 +361,12 @@ def render_cotizador(db: Session, user):
                     disabled=not editable_map.get("rpm", True),
                 )
             with op4:
+                densidad_default = min(float(values_map.get("densidad", 800.0)), 2000.0)
                 densidad = st.number_input(
                     "Densidad M.P. (kg/m³)",
                     min_value=100.0,
                     max_value=2000.0,
-                    value=float(values_map.get("densidad", 800.0)),
+                    value=densidad_default,
                     step=10.0,
                     disabled=not editable_map.get("densidad", True),
                 )
